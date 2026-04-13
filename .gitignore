@@ -15,8 +15,15 @@ afu.cfg
 # fdk-aac-dabplus local build output
 third_party/install/
 
-# fdk-aac-dabplus source (cloned by setup.sh or git submodule)
-third_party/fdk-aac-dabplus/
+# fdk-aac-dabplus build artifacts inside submodule
+third_party/fdk-aac-dabplus/.libs/
+third_party/fdk-aac-dabplus/*.o
+third_party/fdk-aac-dabplus/*.lo
+third_party/fdk-aac-dabplus/*.la
+third_party/fdk-aac-dabplus/config.status
+third_party/fdk-aac-dabplus/config.log
+third_party/fdk-aac-dabplus/Makefile
+third_party/fdk-aac-dabplus/libtool
 
 # Reference repos (read-only, not part of this project)
 third_party/ODR-DabMux/
