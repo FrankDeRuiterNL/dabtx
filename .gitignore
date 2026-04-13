@@ -1,0 +1,50 @@
+# Build output
+build/
+
+# Generated IQ / audio test files
+*.raw
+*.eti
+*.aac
+*.wav
+
+# User config (contains personal data: callsign, QTH)
+dabtx.cfg
+dab.cfg
+afu.cfg
+
+# fdk-aac-dabplus local build output
+third_party/install/
+
+# fdk-aac-dabplus source (cloned by setup.sh or git submodule)
+third_party/fdk-aac-dabplus/
+
+# Reference repos (read-only, not part of this project)
+third_party/ODR-DabMux/
+third_party/ODR-DabMod/
+
+# Generated docs (rebuild with pandoc)
+doc/manual.pdf
+doc/manual.html
+doc/manual-afu.pdf
+doc/manual-afu.html
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
+compile_commands.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Qt-dab debug files
+qtdab.log
+.qt-dab*.ini
+
+# Claude Code
+.claude/
+
+# Clangd cache
+.cache/
