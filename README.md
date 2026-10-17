@@ -1,61 +1,58 @@
-# dabtx — DAB+ Sender fuer HackRF One
+# dabtx — DAB+ Transmitter for HackRF One
 
-Ein vollstaendiger DAB+ Sender in C/C++ fuer den
-[HackRF One](https://greatscottgadgets.com/hackrf/) SDR-Transceiver
-unter Windows 11. Realisiert die komplette Signalkette von der
-PC-Audioquelle bis zum HF-Signal:
+A complete DAB+ transmitter written in C/C++ for the
+[HackRF One](https://greatscottgadgets.com/hackrf/) SDR transceiver
+under Windows 11. Implements the complete signal chain from the
+PC audio source to the RF signal:
 
 ```
-PC-Audio → HE-AAC v1 → DAB+ Superframe → COFDM Modulator → HackRF TX
+PC audio → HE-AAC v1 → DAB+ Superframe → COFDM Modulator → HackRF TX
 ```
 
-## Rechtliche Hinweise
+## Legal Notice
 
-Jede Funkaussendung unterliegt den Gesetzen und Vorschriften des
-jeweiligen Landes. Der Nutzer ist **eigenverantwortlich** dafuer,
-dass der Betrieb im Einklang mit den geltenden Regelungen erfolgt.
-Insbesondere:
+All radio transmissions are subject to the laws and regulations of the
+respective country. The user is **solely responsible** for ensuring that
+operation complies with the applicable regulations. In particular:
 
-- **Frequenzzuteilung**: Sendungen nur auf Frequenzen, fuer die
-  eine gueltige Zulassung besteht (z.B. Amateurfunkzeugnis Klasse A
-  in Deutschland)
-- **Bandplan**: Aktuellen
-  [IARU Region 1 Bandplan](https://www.iaru-r1.org/reference/band-plans/)
-  bzw. nationalen Bandplan (DE:
-  [DARC Bandplaene](https://www.darc.de/der-club/referate/vus/bandplaene/))
-  beachten
-- **Sendeleistung**: Minimale Leistung verwenden, Dummy-Load oder
-  Attenuator einsetzen
-- **Kennung**: Rufzeichenpflicht beachten
+- **Frequency allocation**: Transmit only on frequencies for which a
+  valid authorization exists (e.g. an Amateur Radio Class A license
+  in Germany).
+- **Band plan**: Follow the current
+  [IARU Region 1 Band Plan](https://www.iaru-r1.org/reference/band-plans/)
+  or the applicable national band plan (Germany:
+  [DARC band plans](https://www.darc.de/der-club/referate/vus/bandplaene/)).
+- **Transmit power**: Use the minimum power necessary; use a dummy load
+  or attenuator.
+- **Identification**: Observe any callsign identification requirements.
 
-**Haftungsausschluss**: Der Autor uebernimmt keine Haftung fuer
-Schaeden oder rechtliche Konsequenzen, die aus der Nutzung dieser
-Software entstehen. Die Nutzung erfolgt auf eigenes Risiko und
-eigene Verantwortung.
+**Disclaimer of Liability**: The author accepts no liability for
+damage or legal consequences arising from the use of this software.
+Use is at your own risk and responsibility.
 
 ## Features
 
-- HE-AAC v1 (SBR) Encoder via libfdk-aac (DAB+ Fork)
-- Bis zu 2 Audio-Services im Multiplex
-- DLS (Dynamic Label Segment) Lauftext
-- MOT SlideShow (JPEG/PNG Bilder, max 32 KB)
-- EPG Programm-Zeitplan via DLS-Rotation und SPI (TS 102 818)
-- WASAPI-Loopback fuer bit-perfect Audio-Capture unter Windows
-- 47 konfigurierbare Kanaele (inkl. Amateurfunk 70 cm bis 6 cm)
-- Konfigurationsdatei fuer Ensemble/Service/DLS/EPG
-- Signal-Handling (Ctrl-C) fuer sauberes Shutdown
+- HE-AAC v1 (SBR) encoder via libfdk-aac (DAB+ fork)
+- Up to 2 audio services in the multiplex
+- DLS (Dynamic Label Segment) scrolling text
+- MOT SlideShow (JPEG/PNG images, max. 32 KB)
+- EPG programme schedule via DLS rotation and SPI (TS 102 818)
+- WASAPI loopback for bit-perfect audio capture on Windows
+- 47 configurable channels (including amateur radio bands from 70 cm to 6 cm)
+- Configuration file for ensemble/service/DLS/EPG
+- Signal handling (Ctrl-C) for clean shutdown
 
-## Schnellstart
+## Quick Start
 
-### Voraussetzungen
+### Requirements
 
 - Windows 11 (x64)
-- [MSYS2](https://www.msys2.org/) mit UCRT64 Toolchain
+- [MSYS2](https://www.msys2.org/) with the UCRT64 toolchain
 - [CMake](https://cmake.org/) 3.20+
-- [HackRF One](https://greatscottgadgets.com/hackrf/) mit
-  WinUSB-Treiber (via [Zadig](https://zadig.akeo.ie))
+- [HackRF One](https://greatscottgadgets.com/hackrf/) with
+  the WinUSB driver (via [Zadig](https://zadig.akeo.ie))
 
-### MSYS2-Pakete installieren
+### Install MSYS2 Packages
 
 ```bash
 pacman -S mingw-w64-ucrt-x86_64-gcc \
@@ -67,7 +64,7 @@ pacman -S mingw-w64-ucrt-x86_64-gcc \
           autoconf automake libtool make
 ```
 
-### Bauen
+### Build
 
 ```bash
 # Environment
@@ -75,10 +72,10 @@ export PATH="/c/msys64/ucrt64/bin:/c/Program Files/CMake/bin:$PATH"
 export PKG_CONFIG_PATH="/c/msys64/ucrt64/lib/pkgconfig"
 export CC=gcc CXX=g++
 
-# fdk-aac-dabplus herunterladen und bauen (einmalig)
+# Download and build fdk-aac-dabplus (once)
 ./setup.sh
 
-# dabtx bauen
+# Build dabtx
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 
@@ -86,152 +83,152 @@ cmake --build build
 ctest --test-dir build
 ```
 
-**Hinweis**: Das MSYS2-Systempaket `fdk-aac` unterstuetzt die
-DAB+-spezifische Granule-Length 960 nicht. Daher wird der
-[Opendigitalradio Fork](https://github.com/Opendigitalradio/fdk-aac)
-ueber `setup.sh` automatisch heruntergeladen und gebaut.
+**Note**: The MSYS2 system package `fdk-aac` does not support the
+DAB+-specific granule length of 960. Therefore, the
+[Opendigitalradio fork](https://github.com/Opendigitalradio/fdk-aac)
+is downloaded and built automatically by `setup.sh`.
 
-Bei `git clone --recursive` wird der Fork als Git-Submodule
-mitgeklont. Bei ZIP-Download von GitHub laedt `setup.sh` ihn nach.
+When using `git clone --recursive`, the fork is cloned as a Git submodule.
+When downloading a ZIP archive from GitHub, `setup.sh` downloads it afterward.
 
-### Senden
+### Transmit
 
 ```bash
-# Audio-Geraete auflisten
+# List audio devices
 ./build/src/dabtx.exe --list-audio
 
-# Senden auf 23 cm mit Audio-Device 31, 120 Sekunden, 35 dB
+# Transmit on 23 cm using audio device 31, for 120 seconds, at 35 dB
 ./build/src/dabtx.exe --tx ham-23a 31 120 35
 
-# Mit Konfigurationsdatei
+# Transmit using a configuration file
 ./build/src/dabtx.exe --config afu.cfg --tx ham-13a 31 300 35
 
-# Offline-Test (IQ-Datei fuer qt-dab)
+# Offline test (IQ file for qt-dab)
 ./build/src/dabtx.exe --tx-file ham-23a 31 60 test.raw
 ```
 
-**Wichtig**: Auf dem gewaehlten Audio-Ausgabegeraet muss aktiv
-Audio abgespielt werden — WASAPI-Loopback capturt nur aktives Audio.
+**Important**: Audio must be actively playing on the selected audio output
+device — WASAPI loopback captures only active audio.
 
-## Konfigurationsdatei
+## Configuration File
 
-Beispiel siehe `afu.cfg.example`. Kopieren und anpassen:
+See `afu.cfg.example` for an example. Copy it and customize it:
 
 ```bash
 cp afu.cfg.example afu.cfg
-# Rufzeichen, QTH, DLS-Text etc. editieren
+# Edit callsign, QTH, DLS text, etc.
 ```
 
-Config-Keys: `ensemble`, `service`, `dls`, `slide`, `epg.1`..`epg.20`
+Configuration keys: `ensemble`, `service`, `dls`, `slide`, `epg.1`..`epg.20`
 
-EPG-Format: `epg.1 = 14:00 | 15:00 | Titel der Sendung`
+EPG format: `epg.1 = 14:00 | 15:00 | Programme title`
 
-## Amateurfunk-Kanaele
+## Amateur Radio Channels
 
-| Kanal | Frequenz | Band | Eignung |
-|-------|----------|------|---------|
-| ham-70a | 434.500 MHz | 70 cm | Zu breit fuer 1 MHz Fenster |
-| ham-23a | 1298.000 MHz | 23 cm | Gut (DATV-Segment) |
-| ham-23b | 1299.500 MHz | 23 cm | Gut |
-| ham-13a | 2345.000 MHz | 13 cm | Gut (DATV-Segment) |
-| ham-13b | 2395.000 MHz | 13 cm | Gut |
-| ham-6a | 5760.000 MHz | 6 cm | Moeglich (HackRF max ~6 GHz) |
+| Channel | Frequency | Band | Suitability |
+|---------|-----------|------|-------------|
+| ham-70a | 434.500 MHz | 70 cm | Too wide for a 1 MHz window |
+| ham-23a | 1298.000 MHz | 23 cm | Good (DATV segment) |
+| ham-23b | 1299.500 MHz | 23 cm | Good |
+| ham-13a | 2345.000 MHz | 13 cm | Good (DATV segment) |
+| ham-13b | 2395.000 MHz | 13 cm | Good |
+| ham-6a | 5760.000 MHz | 6 cm | Possible (HackRF max. ~6 GHz) |
 
-## Dokumentation
+## Documentation
 
-- `doc/manual.md` — Vollstaendige Bedienungsanleitung
-- `doc/manual-afu.md` — Anleitung fuer Amateurfunk-Betrieb
+- `doc/manual.md` — Complete user manual
+- `doc/manual-afu.md` — Instructions for amateur radio operation
 
-PDF/HTML erzeugen:
+Generate PDF/HTML:
+
 ```bash
 pandoc doc/manual.md -o doc/manual.pdf --pdf-engine=xelatex
 pandoc doc/manual-afu.md -o doc/manual-afu.pdf --pdf-engine=xelatex
 ```
 
-## Technische Eckdaten
+## Technical Specifications
 
-| Parameter | Wert |
-|-----------|------|
-| Modulation | COFDM Mode I, DQPSK, 1536 Traeger |
-| Bandbreite | ~1.536 MHz |
-| Sample-Rate | 2.048 MS/s (IQ, complex float) |
-| Audio-Codec | HE-AAC v1 (SBR), 72 kbps |
-| Schutzcodierung | RS(120,110), EEP-3A |
-| OFDM-Frame | 96 ms (Null + Ref + 76 Symbole) |
-| IFFT | 2048-Punkt (FFTW, float) |
+| Parameter | Value |
+|-----------|-------|
+| Modulation | COFDM Mode I, DQPSK, 1536 carriers |
+| Bandwidth | ~1.536 MHz |
+| Sample rate | 2.048 MS/s (IQ, complex float) |
+| Audio codec | HE-AAC v1 (SBR), 72 kbps |
+| Error protection | RS(120,110), EEP-3A |
+| OFDM frame | 96 ms (Null + Ref + 76 symbols) |
+| IFFT | 2048-point (FFTW, float) |
 
-## Abhaengigkeiten
+## Dependencies
 
-Siehe [THIRD_PARTY.md](THIRD_PARTY.md) fuer vollstaendige
-Lizenz- und Quellenangaben.
+See [THIRD_PARTY.md](THIRD_PARTY.md) for complete license and source information.
 
-| Bibliothek | Zweck | Lizenz |
-|---|---|---|
-| [libhackrf](https://github.com/greatscottgadgets/hackrf) | HackRF USB-Treiber / TX | GPL-2.0+ |
-| [FFTW3](https://www.fftw.org/) | 2048-Punkt IFFT | GPL-2.0+ |
-| [fdk-aac (ODR Fork)](https://github.com/Opendigitalradio/fdk-aac) | HE-AAC v1 Encoder | FDK License |
-| [PortAudio](http://www.portaudio.com/) | Audio-Capture | MIT |
+| Library | Purpose | License |
+|---------|---------|---------|
+| [libhackrf](https://github.com/greatscottgadgets/hackrf) | HackRF USB driver / TX | GPL-2.0+ |
+| [FFTW3](https://www.fftw.org/) | 2048-point IFFT | GPL-2.0+ |
+| [fdk-aac (ODR fork)](https://github.com/Opendigitalradio/fdk-aac) | HE-AAC v1 encoder | FDK License |
+| [PortAudio](http://www.portaudio.com/) | Audio capture | MIT |
 | [libfec](https://github.com/quiet/libfec) | Reed-Solomon RS(120,110) | LGPL-2.1 |
 
 ## Credits
 
 ### Hardware
 
-Dieses Projekt waere nicht moeglich ohne den
-**[HackRF One](https://greatscottgadgets.com/hackrf/)** von
+This project would not be possible without the
+**[HackRF One](https://greatscottgadgets.com/hackrf/)** from
 **[Great Scott Gadgets](https://greatscottgadgets.com/)**, designed
-by **Michael Ossmann**. Ein brillantes Stueck Open-Source-Hardware,
-das SDR-Experimente fuer jedermann zugaenglich macht — vom
-Empfang bis zum Senden, von 1 MHz bis 6 GHz. Sowohl die Hardware
-als auch die Software (libhackrf, hackrf-tools) sind unter offenen
-Lizenzen verfuegbar.
+by **Michael Ossmann**. It is a brilliant piece of open-source hardware
+that makes SDR experimentation accessible to everyone — from reception
+to transmission, from 1 MHz to 6 GHz. Both the hardware and the software
+(libhackrf, hackrf-tools) are available under open licenses.
 
-### Software-Referenzen
+### Software References
 
-Die DAB+ Signalverarbeitung basiert auf dem Studium der
-**[Opendigitalradio](https://www.opendigitalradio.org/)** Projekte:
+The DAB+ signal processing is based on studying the
+**[Opendigitalradio](https://www.opendigitalradio.org/)** projects:
 
 - **[ODR-DabMux](https://github.com/Opendigitalradio/ODR-DabMux)** —
-  FIG-Byte-Layouts, ETI-Frame-Struktur, Subchannel-Konfiguration
+  FIG byte layouts, ETI frame structure, subchannel configuration
 - **[ODR-DabMod](https://github.com/Opendigitalradio/ODR-DabMod)** —
-  Convolutional Encoder, Puncturing, Frequency-Interleaver, OFDM
-- **[fdk-aac (ODR Fork)](https://github.com/Opendigitalradio/fdk-aac)** —
-  HE-AAC Encoder mit DAB+ TT_DABPLUS Transport
+  convolutional encoder, puncturing, frequency interleaver, OFDM
+- **[fdk-aac (ODR fork)](https://github.com/Opendigitalradio/fdk-aac)** —
+  HE-AAC encoder with DAB+ TT_DABPLUS transport
 
-Debugging und Verifikation erfolgten mit
-**[qt-dab](https://github.com/JvanKatwijk/qt-dab)** von Jan van Katwijk.
+Debugging and verification were performed using
+**[qt-dab](https://github.com/JvanKatwijk/qt-dab)** by Jan van Katwijk.
 
-### Entwicklung
+### Development
 
-Dieses Projekt wurde von **Stefan Kammann (DM2TIM)** konzipiert und
-mit umfassender Unterstuetzung durch
-**[Claude Code](https://claude.ai/code)** von
-[Anthropic](https://www.anthropic.com/) entwickelt.
+This project was conceived by **Stefan Kammann (DM2TIM)** and developed
+with extensive assistance from
+**[Claude Code](https://claude.ai/code)** by
+[Anthropic](https://www.anthropic.com/).
 
-Die komplette Software-Implementierung — von der DSP-Signalverarbeitung
-und DAB+ Protokoll-Codierung ueber den COFDM-Modulator bis zur
-HackRF-Integration — wurde von Claude Code (Claude Opus) geschrieben,
-gesteuert durch Stefans Projektvision, Architekturentscheidungen,
-Hardware-Tests und Fachkenntnisse in Amateurfunk und DAB+ Standards.
+The complete software implementation — from DSP signal processing and
+DAB+ protocol encoding through the COFDM modulator to HackRF integration —
+was written by Claude Code (Claude Opus), guided by Stefan's project
+vision, architectural decisions, hardware testing, and expertise in
+amateur radio and DAB+ standards.
 
-Die Entwicklung umfasste unter anderem:
-- Komplette DAB+ Sendekette (Audio → HE-AAC → Superframe → OFDM → IQ)
-- Reed-Solomon Codierung, Faltungscodierer, Frequenz-Interleaving
-- FIC/FIG Generierung nach ETSI EN 300 401
-- MOT SlideShow und SPI/EPG Implementierung
-- WASAPI-Loopback Audio-Backend (Windows COM API)
-- Umfangreiches Debugging gegen qt-dab als Referenz-Empfaenger
+Development included, among other things:
 
-## Lizenz
+- Complete DAB+ transmission chain (audio → HE-AAC → superframe → OFDM → IQ)
+- Reed-Solomon encoding, convolutional encoder, frequency interleaving
+- FIC/FIG generation according to ETSI EN 300 401
+- MOT SlideShow and SPI/EPG implementation
+- WASAPI loopback audio backend (Windows COM API)
+- Extensive debugging against qt-dab as the reference receiver
 
-Dieses Projekt ist lizenziert unter der
-**GNU General Public License v3.0 or later** — siehe
+## License
+
+This project is licensed under the
+**GNU General Public License v3.0 or later** — see
 [LICENSE](LICENSE).
 
-Vendored libfec-Dateien unterliegen der LGPL-2.1 — siehe
-Copyright-Header in `third_party/fec/`.
+Vendored libfec files are subject to LGPL-2.1 — see the copyright
+headers in `third_party/fec/`.
 
-## ETSI-Standards
+## ETSI Standards
 
 - EN 300 401 — DAB System (COFDM, MUX, FIC/MSC)
 - TS 102 563 — DAB+ Audio (Superframe, Reed-Solomon, HE-AAC)
